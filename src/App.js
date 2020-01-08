@@ -13,25 +13,26 @@ const style = {
 function App() {
 
   const myScanner = React.useRef();
+  let scanner;
 
   const initBarcodeScanner = async () => {
     try {
-      console.log(await Dynamsoft.BarcodeScanner.createInstance());
-      //console.log(scanner);
+      scanner = await Dynamsoft.BarcodeScanner.createInstance();
+      console.log(scanner);
 
-      // scanner.setUIElement(myScanner.current);
-      // scanner.onFrameRead = results => {
-      //   if (results.length) {
-      //     console.log(results);
-      //   }
-      // };
-      // scanner.onUnduplicatedRead = (txt, result) => {
-      //   console.log(result.barcodeFormatString + ': ' + txt);
-      // };
-      // await scanner.open();
+      scanner.setUIElement(myScanner.current);
+      scanner.onFrameRead = results => {
+        if (results.length) {
+          console.log(results);
+        }
+      };
+      scanner.onUnduplicatedRead = (txt, result) => {
+        console.log(result.barcodeFormatString + ': ' + txt);
+      };
+      await scanner.open();
 
     } catch (ex) {
-      //console.error(ex);
+      console.error(ex);
     }
   };
 
@@ -39,11 +40,11 @@ function App() {
     initBarcodeScanner();
 
     return () => {
-      // if (scanner) {
-      //   scanner.close();
-      //   scanner.destroy();
-      //   scanner = null;
-      // }
+      if (scanner) {
+        scanner.close();
+        scanner.destroy();
+        scanner = null;
+      }
     }
   }, []);
 

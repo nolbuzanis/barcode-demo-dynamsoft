@@ -1,26 +1,62 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Dynamsoft from './Dynamsoft';
+
+const style = {
+  video: {
+    width: "640px",
+    height: "480px",
+    border: "1px solid black",
+    resize: "both"
+  }
+}
 
 function App() {
+
+  const myScanner = React.useRef();
+
+  const initBarcodeScanner = async () => {
+    try {
+      console.log(await Dynamsoft.BarcodeScanner.createInstance());
+      //console.log(scanner);
+
+      // scanner.setUIElement(myScanner.current);
+      // scanner.onFrameRead = results => {
+      //   if (results.length) {
+      //     console.log(results);
+      //   }
+      // };
+      // scanner.onUnduplicatedRead = (txt, result) => {
+      //   console.log(result.barcodeFormatString + ': ' + txt);
+      // };
+      // await scanner.open();
+
+    } catch (ex) {
+      //console.error(ex);
+    }
+  };
+
+  React.useEffect(() => {
+    initBarcodeScanner();
+
+    return () => {
+      // if (scanner) {
+      //   scanner.close();
+      //   scanner.destroy();
+      //   scanner = null;
+      // }
+    }
+  }, []);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div ref={myScanner}>
+      <select className="dbrScanner-sel-camera"></select>
+      <select className="dbrScanner-sel-resolution"></select>
+      <br />
+      <video className="dbrScanner-video" style={style.video}></video>
     </div>
   );
 }
+
 
 export default App;
